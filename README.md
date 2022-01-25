@@ -1,5 +1,7 @@
 # Rupert Reaching Data
 
+yo github is pretty cool look at my graphs
+
 This is just a repo for data regarding reaching kinematics. Trying to get a hold of github in the process.
 
 ##
