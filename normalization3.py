@@ -179,6 +179,8 @@ plt.plot(controlshoulderx, label = "Control Shoulder")
 plt.plot(exciteshoulderx, label = "Excitatory Shoulder")
 plt.legend(loc = 2)
 plt.title("Shoulder Comparison")
+plt.xlabel("Timeframe")
+plt.ylabel("x-Location of Joint")
 plt.savefig("shouldercomparison.jpg")
 
 plt.figure(5)
@@ -188,6 +190,8 @@ plt.plot(controlelbowx, label = "Control Elbow")
 plt.plot(exciteelbowx, label = "Excitatory Elbow")
 plt.title("Elbow Comparison")
 plt.legend(loc = 2)
+plt.xlabel("Timeframe")
+plt.ylabel("x-Location of Joint")
 plt.savefig("elbowcomparison.jpg")
 
 plt.figure(6)
@@ -197,7 +201,20 @@ plt.plot(controlwristx, label = "Control Wrist")
 plt.plot(excitewristx, label = "Excitatory Wrist")
 plt.legend(loc = 2)
 plt.title("Wrist Comparison")
+plt.xlabel("Timeframe")
+plt.ylabel("x-Location of Joint")
 plt.savefig("wristcomparison.jpg")
 
 
 #
+#%%
+#from here i would like to see if i can remake the graphs
+#but adjust the axes so theyre not all negative 
+
+
+
+
+
+
+
+
