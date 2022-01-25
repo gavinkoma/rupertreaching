@@ -179,15 +179,16 @@ plt.plot(controlshoulderx, label = "Control Shoulder")
 plt.plot(exciteshoulderx, label = "Excitatory Shoulder")
 plt.legend(loc = 2)
 plt.title("Shoulder Comparison")
+plt.savefig("shouldercomparison.jpg")
 
 plt.figure(5)
 plt.clf()
 plt.plot(inhibitoryelbowx, label="Inhibitory Elbow")
-plt.plot(controlelbowx, label = "Control Elbow)
-plt.plot(exciteshoulderx, label = "Excitatory Elbow")
+plt.plot(controlelbowx, label = "Control Elbow")
+plt.plot(exciteelbowx, label = "Excitatory Elbow")
+plt.title("Elbow Comparison")
 plt.legend(loc = 2)
-plt.show()
-
+plt.savefig("elbowcomparison.jpg")
 
 plt.figure(6)
 plt.clf()
@@ -196,6 +197,7 @@ plt.plot(controlwristx, label = "Control Wrist")
 plt.plot(excitewristx, label = "Excitatory Wrist")
 plt.legend(loc = 2)
 plt.title("Wrist Comparison")
+plt.savefig("wristcomparison.jpg")
 
 
 #
