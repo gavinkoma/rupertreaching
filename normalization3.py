@@ -17,9 +17,10 @@ from matplotlib import pyplot as plt
 #%%
 #read in the data
 #we can just use the control rat as the normalization point
-inhib = pd.read_csv("Rupert_week2_cam2_Inhibitory Rat 5_2021-08-10_11_28_34_fr_wbgam_h264_nearlossless_safeDLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000.csv")
-excit = pd.read_csv("Rupert_week2_cam2_JI Excitatory 4_2021-08-10_11_02_23_fr_wbgam_h264_nearlossless_safeDLC_resnet50_Rupert Reaching VideosSep27shuffle1_600000.csv")
-control = pd.read_csv("Rupert_week2_cam2_MG Control 2_2021-08-10_11_11_56_fr_wbgam_h264_nearlossless_safeDLC_resnet50_Rupert Reaching VideosSep27shuffle1_600000.csv")
+idx = pd.IndexSlice
+inhib = pd.read_csv("Rupert_week2_cam2_Inhibitory Rat 5_2021-08-10_11_28_34_fr_wbgam_h264_nearlossless_safeDLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000.csv",index_col=0,header=[0,1,2])
+control = pd.read_csv("Rupert_week2_cam2_MG Control 2_2021-08-10_11_11_56_fr_wbgam_h264_nearlossless_safeDLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000.csv",index_col=0,header=[0,1,2])
+ex = pd.read_csv("Rupert_week2_cam2_JI Excitatory 4_2021-08-10_11_02_23_fr_wbgam_h264_nearlossless_safeDLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000.csv",index_col=0,header=[0,1,2])
 
 #%%
 #read in the corner csv
@@ -28,16 +29,28 @@ xval = corner.iloc[0][0]
 float(xval)
 yval = corner.iloc[0][1]
 float(yval)
-
 print(xval,yval)
+
 #%%
-#inhibitory rat data
-inhibitoryshoulderx = inhib["Shoulderx"][1:,]
-inhibitoryshouldery = inhib["Shouldery"][1:,]
-inhibitoryelbowx = inhib["Elbowx"][1:,]
-inhibitoryelbowy = inhib["Elbowy"][1:,]
-inhibitorywristx = inhib["Wristx"][1:,]
-inhibitorywristy = inhib["Wristy"][1:,]
+
+inhibitoryshoulderx = inhib.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'shoulder','x']]
+
+inhibitoryshouldery = inhib.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'shoulder','y']]
+    
+inhibitoryelbowx = inhib.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'elbow','x']]
+    
+inhibitoryelbowy = inhib.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'elbow','y']]
+    
+inhibitorywristx = inhib.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'wrist','x']]
+    
+inhibitorywristy = inhib.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'wrist','y']]
+    
 
 inhibitoryshoulderx = pd.DataFrame([float(x) for x in inhibitoryshoulderx]-xval)
 inhibitoryshouldery = pd.DataFrame([float(x) for x in inhibitoryshouldery]-yval)
@@ -58,18 +71,31 @@ plt.clf()
 plt.scatter(inhibitoryshoulderx,inhibitoryshouldery,label = "Inhib Shoulder",s=5)
 plt.scatter(inhibitoryelbowx,inhibitoryelbowy,label = "Inhib Elbow",s=5)
 plt.scatter(inhibitorywristx,inhibitorywristy,label = "Inhib Wrist",s=5)
+plt.title("Inhibitory Rat")
 plt.legend(loc = 2)
 
 plt.savefig("inhibitoryratplot.jpg")
 
 #%%
 #control rat next
-controlshoulderx = control["Shoulderx"][1:,]
-controlshouldery = control["Shouldery"][1:,]
-controlelbowx = control["Elbowx"][1:,]
-controlelbowy = control["Elbowy"][1:,]
-controlwristx = control["Wristx"][1:,]
-controlwristy = control["Wristy"][1:,]
+
+controlshoulderx = control.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'shoulder','x']]
+
+controlshouldery = control.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'shoulder','y']]
+    
+controlelbowx = control.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'elbow','x']]
+    
+controlelbowy = control.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'elbow','y']]
+    
+controlwristx = control.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'wrist','x']]
+    
+controlwristy = control.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'wrist','y']]
 
 controlshoulderx = pd.DataFrame([float(x) for x in controlshoulderx]-xval)
 controlshouldery = pd.DataFrame([float(x) for x in controlshouldery]-yval)
@@ -100,12 +126,23 @@ plt.savefig("controlratplot.jpg")
 #%%
 
 #excitatory rat data
-exciteshoulderx = excit["Shoulderx"][1:,]
-exciteshouldery = excit["Shouldery"][1:,]
-exciteelbowx = excit["Elbowx"][1:,]
-exciteelbowy = excit["Elbowy"][1:,]
-excitewristx = excit["Wristx"][1:,]
-excitewristy = excit["Wristy"][1:,]
+exciteshoulderx = ex.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'shoulder','x']]
+
+exciteshouldery = ex.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'shoulder','y']]
+    
+exciteelbowx = ex.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'elbow','x']]
+    
+exciteelbowy = ex.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'elbow','y']]
+    
+excitewristx = ex.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'wrist','x']]
+    
+excitewristy = ex.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
+             'wrist','y']]
 
 exciteshoulderx = pd.DataFrame([float(x) for x in exciteshoulderx]-xval)
 exciteshouldery = pd.DataFrame([float(x) for x in exciteshouldery]-yval)
@@ -127,44 +164,38 @@ plt.clf()
 plt.scatter(exciteshoulderx,exciteshouldery,label = "Shoulder",s=5)
 plt.scatter(exciteelbowx,exciteelbowy,label = "Elbow",s=5)
 plt.scatter(excitewristx,excitewristy,label = "Wrist",s=5)
-plt.title("Excitatory Rat Normalized Against Control Rat")
+plt.title("Excitatory Rat")
 plt.legend(loc = 2)
 plt.show()
 
 plt.savefig("excitatoryratplot.jpg")
 
 #%%
-
+#comparison graphs
 plt.figure(4)
 plt.clf()
+plt.plot(inhibitoryshoulderx,label = "Inhibitory Shoulder")
+plt.plot(controlshoulderx, label = "Control Shoulder")
+plt.plot(exciteshoulderx, label = "Excitatory Shoulder")
+plt.legend(loc = 2)
+plt.title("Shoulder Comparison")
 
-
-plt.plot(pd.concat([excitewristx],1))
-
-
-#%%
 plt.figure(5)
 plt.clf()
-excitewristx.plot()
+plt.plot(inhibitoryelbowx, label="Inhibitory Elbow")
+plt.plot(controlelbowx, label = "Control Elbow)
+plt.plot(exciteshoulderx, label = "Excitatory Elbow")
+plt.legend(loc = 2)
+plt.show()
 
 
-idx = pd.IndexSlice
-d = pd.read_csv(data, index_col = 0, header = [0,1,2])
-wx = d.loc[:,idx[name,body,coordingate]]
+plt.figure(6)
+plt.clf()
+plt.plot(inhibitorywristx, label = "Inhibitory Wrist")
+plt.plot(controlwristx, label = "Control Wrist")
+plt.plot(excitewristx, label = "Excitatory Wrist")
+plt.legend(loc = 2)
+plt.title("Wrist Comparison")
 
-import matplotlib.pyplot as plt
-
-plt.plot(range(10))
-# %%
-import pandas as pd
-idx = pd.IndexSlice
-
-d=pd.read_csv('mdata.csv',index_col=0,header=[0,1,2])
-
-wx = d.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
-             'wrist',['x','y']]]
-    
-ax = d.loc[:,idx['DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000', \
-             :,'x']]
 
 #
