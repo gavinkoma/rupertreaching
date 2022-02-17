@@ -14,3 +14,9 @@ we need to measure the width of the reaching shelf \
 this will let us calibrate the y axis for distance instead of pixels reached \
 might also be worth inverting the axis as well to prevent confusion; \
 as of right now, the axis is in negative defined pixels
+
+##
+update 02.17.22\
+okay so we have new data that has been uploaded to the gpu2\
+we need to determine how we will compare the inhib data\
+to the data of the new mocap rigs (not sure how to do this)
