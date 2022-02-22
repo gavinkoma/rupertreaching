@@ -1,0 +1,98 @@
+---
+title: "rupertreach"
+author: "A. Spence"
+date: "2/22/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+'%!in%' <- function(x,y)!('%in%'(x,y))
+```
+
+# Rupert reaching data for PA grant
+
+Let's recreate one of our python box plots to show we've loaded the data.
+
+Testlink <http://spencelab.com>.
+
+## Get started
+```{r chunk1}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggpubr)
+library(car)
+library(Hmisc)
+library(rstatix)
+library(emmeans)
+library(nlme)
+library(stringr)
+
+theme_update(plot.title = element_text(hjust = 0.5))
+# maybe the plain BW background looks better than the grey stuff
+# https://www.datanovia.com/en/lessons/combine-multiple-ggplots-into-a-figure/
+#
+theme_set(theme_bw())
+#+
+#    theme(legend.position = "top")
+#  )
+dfx <- read.csv("alldata_x.csv")
+dfy <- read.csv("alldata_y.csv")
+```
+
+# prepare data, aggregate and stats
+```{r prep}
+dfx$treatment <- factor(dfx$treatment)
+dfx$treatment <- relevel(dfx$treatment,'excite')
+dfxt <- dfx %>% filter(time==0.4)
+dfxt %>% group_by(treatment) %>%
+  summarise(
+    count = n(),
+    mean = mean(x, na.rm = TRUE),
+    sd = sd(x, na.rm = TRUE),
+    median = median(x, na.rm = TRUE),
+    IQR = IQR(x, na.rm = TRUE)
+  )
+dfxt %>% ggplot(aes(x = treatment, y = x))+ 
+  geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  ylab("Max x") +
+  xlab("Treatment") +
+  coord_cartesian(ylim = c(-27, 35)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
+  ggtitle("Wrist Max x")
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='t.test',  hide.ns = TRUE )
+ggsave('xbox.pdf',width=2.5,height=3,units='in')
+kruskal.test(x ~ treatment, data = dfxt)
+pairwise.wilcox.test(dfxt$x, dfxt$treatment,
+                 p.adjust.method = "BH")
+```
+# y coord box plot
+
+```{r prep2}
+dfy$treatment <- factor(dfy$treatment)
+dfy$treatment <- relevel(dfy$treatment,'excite')
+dfyt <- dfy %>% filter(time==0.4)
+dfyt %>% group_by(treatment) %>%
+  summarise(
+    count = n(),
+    mean = mean(y, na.rm = TRUE),
+    sd = sd(y, na.rm = TRUE),
+    median = median(y, na.rm = TRUE),
+    IQR = IQR(y, na.rm = TRUE)
+  )
+dfyt %>% ggplot(aes(x = treatment, y = y))+ 
+  geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  ylab("Max y") +
+  xlab("Treatment") +
+  coord_cartesian(ylim = c(-27, 50)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
+  ggtitle("Wrist Max y")
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='t.test',  hide.ns = TRUE )
+ggsave('ybox.pdf',width=2.5,height=3,units='in')
+kruskal.test(y ~ treatment, data = dfyt)
+pairwise.wilcox.test(dfyt$y, dfyt$treatment,
+                 p.adjust.method = "BH")
+```
