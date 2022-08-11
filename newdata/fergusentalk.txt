@@ -1,0 +1,24 @@
+fergusen
+
+good for it strapped locations -> us
+recruiting data competent people... harder to compete with industry
+
+do people use the private portion as a storage server?
+or once stuff is published...
+
+is tracking across outcomes sounds like identifying cell types...
+(histology, gene expression, electrophysiology, function...)
+
+where do you stand on the big data versus hypotheses continuum?
+janelia farm vs ...
+deep learning vs mechanistic
+
+microbehaviors
+
+works when there's a significant effect of your injury/phenomenon
+
+do you need to redo your manifold analysis on the data set with the drug effect?
+or did you stick with the one that captures injury?
+
+neilsen topological data analysis stuff to Shai Revzen
+
