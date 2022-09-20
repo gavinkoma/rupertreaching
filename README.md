@@ -26,5 +26,6 @@ update 09.19.22\
 need better panel A still figure for R01 submission. where is the raw data?\
 here:\
 '/Volumes/storager01/rupert_20220113_20220209/grantprelim/week1/cam3/ratER6Control/2022-01-31_12_42_21/grantprelim_week1_cam3_ratER6Control_2022-01-31_12_42_21_fr_wbgam_h264_nearlossless_safe.mp4'\
-we used ...
-try 22-02-09 12-07-27. at 28 seconds... not great nose is in, but other paw not there.
+we used ...\
+try 22-02-09 12-07-27. at 28 seconds... not great nose is in, but other paw not there.\
+good! using that. put in the AI, sent to GMS on 2022-09-20 by AJS. pushed to repo.\
