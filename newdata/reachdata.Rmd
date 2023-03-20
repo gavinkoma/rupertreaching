@@ -20,6 +20,7 @@ Testlink <http://spencelab.com>.
 ```{r chunk1}
 library(dplyr)
 library(tidyr)
+library(readr)
 library(ggplot2)
 library(ggpubr)
 library(car)
@@ -138,3 +139,140 @@ kruskal.test(y ~ treatment, data = dfyt)
 pairwise.wilcox.test(dfyt$y, dfyt$treatment,
                  p.adjust.method = "BH")
 ```
+
+Ok let's update with velocities, reach duration, deltaX, deltaY plots.
+
+```{r velo}
+md<-read_csv("reachfiles_generated_wvelocities.csv",col_types = cols(type=col_factor())) %>% filter(goodbad=="good")
+md$type <- relevel(md$type,'control')
+md$type <- relevel(md$type,'excite')
+my_comps <- list( c("control","inhib"),c("excite","control"),
+                  c("excite","inhib") )
+md %>% ggplot(aes(x = type, y = velx, color=type))+ 
+  #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  geom_violin(trim = FALSE,show.legend=FALSE) +
+  geom_dotplot(
+    binaxis='y', stackdir='center',
+    color = "black", fill = "#999999",
+    ) +
+  stat_summary(
+    fun.data="mean_sdl",  fun.args = list(mult=1), 
+    geom = "pointrange", color = "#FC4E07", size = 0.4
+    )+
+  stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
+ylab("X Velocity") +
+  xlab("Treatment") +
+  #coord_cartesian(ylim = c(-27, 60)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
+  ggtitle("X Velocity vs Treatment") +
+  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='kruskal.test',  hide.ns = TRUE )
+ggsave('xvel.pdf',width=2.5,height=3,units='in')
+```
+
+and now y
+
+```{r veloy}
+md %>% ggplot(aes(x = type, y = -vely, color=type))+ 
+  #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  geom_violin(trim = FALSE,show.legend=FALSE) +
+  geom_dotplot(
+    binaxis='y', stackdir='center',
+    color = "black", fill = "#999999",
+    ) +
+  stat_summary(
+    fun.data="mean_sdl",  fun.args = list(mult=1), 
+    geom = "pointrange", color = "#FC4E07", size = 0.4
+    )+
+  stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
+ylab("Y Velocity") +
+  xlab("Treatment") +
+  #coord_cartesian(ylim = c(-27, 60)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
+  ggtitle("Y Velocity vs Treatment") +
+  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='kruskal.test',  hide.ns = TRUE )
+ggsave('yvel.pdf',width=2.5,height=3,units='in')
+```
+
+and now dur
+
+```{r veloy}
+md %>% ggplot(aes(x = type, y = rchdur, color=type))+ 
+  #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  geom_violin(trim = FALSE,show.legend=FALSE) +
+  geom_dotplot(
+    binaxis='y', stackdir='center',
+    color = "black", fill = "#999999",
+    ) +
+  stat_summary(
+    fun.data="mean_sdl",  fun.args = list(mult=1), 
+    geom = "pointrange", color = "#FC4E07", size = 0.4
+    )+
+  stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
+ylab("Reach Duration (s)") +
+  xlab("Treatment") +
+  #coord_cartesian(ylim = c(-27, 60)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
+  ggtitle("Reach Duration vs Treatment") +
+  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='kruskal.test',  hide.ns = TRUE )
+ggsave('reachdur.pdf',width=2.5,height=3,units='in')
+```
+
+and now deltax
+
+```{r veloy}
+md %>% ggplot(aes(x = type, y = dx, color=type))+ 
+  #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  geom_violin(trim = FALSE,show.legend=FALSE) +
+  geom_dotplot(
+    binaxis='y', stackdir='center',
+    color = "black", fill = "#999999",
+    ) +
+  stat_summary(
+    fun.data="mean_sdl",  fun.args = list(mult=1), 
+    geom = "pointrange", color = "#FC4E07", size = 0.4
+    )+
+  stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
+ylab("Reach Distance (x)") +
+  xlab("Treatment") +
+  #coord_cartesian(ylim = c(-27, 60)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
+  ggtitle("Reach X Distance vs Treatment") +
+  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='kruskal.test',  hide.ns = TRUE )
+ggsave('xdistance.pdf',width=2.5,height=3,units='in')
+```
+
+and now deltay
+
+```{r veloy}
+md %>% ggplot(aes(x = type, y = dy, color=type))+ 
+  #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  geom_violin(trim = FALSE,show.legend=FALSE) +
+  geom_dotplot(
+    binaxis='y', stackdir='center',
+    color = "black", fill = "#999999",
+    ) +
+  stat_summary(
+    fun.data="mean_sdl",  fun.args = list(mult=1), 
+    geom = "pointrange", color = "#FC4E07", size = 0.4
+    )+
+  stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
+ylab("Reach Distance (y)") +
+  xlab("Treatment") +
+  #coord_cartesian(ylim = c(-27, 60)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
+  ggtitle("Reach Y Distance vs Treatment") +
+  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='kruskal.test',  hide.ns = TRUE )
+ggsave('ydistance.pdf',width=2.5,height=3,units='in')
+```
+
+

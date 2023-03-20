@@ -1,5 +1,5 @@
 scorer,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000,DLC_resnet50_Rupert Reaching Videos_sampleOct3shuffle1_200000
-bodyparts,shoulder,shoulder,shoulder,elbow,elbow,elbow,wrist,wrist,wrist
+bodyparts,shoulder,shoulder,shoulder,elbow,elbow,elbow,Wrist,Wrist,Wrist
 coords,x,y,likelihood,x,y,likelihood,x,y,likelihood
 0,1302.554565,424.8470764,0.892165422,1266.832153,569.1704102,0.804538846,1350.370117,627.8661499,0.824371219
 1,1299.843506,424.3083801,0.859996855,1260.21582,568.5886841,0.824253619,1349.351318,627.9510498,0.806892693
