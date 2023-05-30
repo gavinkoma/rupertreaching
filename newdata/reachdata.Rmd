@@ -199,7 +199,7 @@ ggsave('yvel.pdf',width=2.5,height=3,units='in')
 
 and now dur
 
-```{r veloy}
+```{r velox}
 md %>% ggplot(aes(x = type, y = rchdur, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
@@ -225,7 +225,7 @@ ggsave('reachdur.pdf',width=2.5,height=3,units='in')
 
 and now deltax
 
-```{r veloy}
+```{r veloy2}
 md %>% ggplot(aes(x = type, y = dx, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
@@ -251,7 +251,7 @@ ggsave('xdistance.pdf',width=2.5,height=3,units='in')
 
 and now deltay
 
-```{r veloy}
+```{r veloy3}
 md %>% ggplot(aes(x = type, y = dy, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
