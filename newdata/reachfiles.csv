@@ -27,3 +27,5 @@ inhib,no,1086,241,38,5.984251969,0,1000,420,449,200,1,good,wrist,ihrGS2,/Users/a
 inhib,no,1086,241,38,5.984251969,0,1000,433,490,200,1,bad,wrist,ihrMS1,/Users/aspence/rupertreaching/newinhibrat/week4/cam2/Rupert Inhib MS1 /2022-07-22_12_01_31/CollectedData_gtk.csv
 inhib,no,1086,241,38,5.984251969,0,1000,419,487,200,1,bad,wrist,ihrMS1,/Users/aspence/rupertreaching/newinhibrat/week4/cam2/Rupert Inhib MS1 /2022-07-22_12_04_44/CollectedData_gtk.csv
 inhib,no,1086,241,38,5.984251969,0,1000,173,238,200,1,bad,wrist,ihrMS1,/Users/aspence/rupertreaching/newinhibrat/week4/cam2/Rupert Inhib MS1 /2022-07-22_12_10_41/CollectedData_gtk.csv
+inhib,no,1580,304,57,8.98,0,1000,426,459,200,0,good,Wrist,DDinhib,dd_inhib_female_2023_05_03_10_23_27DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+inhib,no,1580,304,57,8.98,0,1000,426,459,200,0,bad,Wrist,DDinhib,DDinhib_05_03_10_31_56DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
