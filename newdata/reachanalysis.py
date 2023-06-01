@@ -10,11 +10,12 @@ on spence new M1 mac: launch iterm2-x64! then do conda activate dog
 dog environment has what's needed... and arm64 version conda iffy.
 
 """
-# 2023-05-31 AJS and GK adding one new inhibitory rat from 2023-05-31
+# 2023-05-31 AJS 
+# finished adding 2 more trials from that rat... good reaches in last vid 43, too bad one at 1 sec goes before vid start! could fix.
+# 2023-05-31 AJS and GK adding one new inhibitory rat from 2023-05-03
 # this one added and worked: dd_inhib_female_2023_05_03_10_23_27DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
 # this one the reach was supposed to be at 25 sec and didn't track well. can switch to manual coords... DDinhib_05_03_10_31_56DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
 # 
-#
 # 2022-12-12 AJS adding two new inhibitory rats.
 # found manually labelled videos. make excel file with notes, see that.
 # copied csv of coordinates. how to roll into this?
@@ -154,7 +155,7 @@ f.clf()
 #f.set_figheight(1.32)
 #f.set_figwidth(2.87)
 #f=plt.figure(figsize=(2.87,1,32))
-cols={'inhib':'green','control':'blue','excite':'red'}
+cols={'inhib':'green','control':'blue','excite':'red','norm':'black'}
 subs=[]
 # create mapping of unique treatments to themselves
 legendlabs = dict(zip(md.loc[:,'type'].unique(),md.loc[:,'type'].unique()))
@@ -215,7 +216,7 @@ plt.savefig('meansdreach_x.pdf')
 # %% Okay use peaks to overlay excite in red, control is blue.
 f4=plt.figure(4)
 f4.clf()
-cols={'inhib':'green','control':'blue','excite':'red'}
+# USE ABOVE DEF! cols={'inhib':'green','control':'blue','excite':'red'}
 subs=[]
 # create mapping of unique treatments to themselves
 legendlabs = dict(zip(md.loc[:,'type'].unique(),md.loc[:,'type'].unique()))

@@ -59,6 +59,97 @@ dfxt %>% group_by(treatment) %>%
 # Plot it:
 # choose comparisons to plot
 # http://www.sthda.com/english/articles/32-r-graphics-essentials/132-plot-grouped-data-box-plot-bar-plot-and-more/
+```
+
+Do the 4 way analysis
+```{r fourwayx}
+my_comps <- list( c("control","inhib"),c("excite","control"),
+                  c("excite","inhib"), c("control","norm"), c("excite","norm"), c("norm","inhib") )
+dfxt %>% ggplot(aes(x = treatment, y = x,color = treatment))+ 
+  #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  geom_violin(trim = FALSE,show.legend=FALSE) +
+  geom_dotplot(
+    binaxis='y', stackdir='center',
+    color = "black", fill = "#999999",
+    ) +
+  stat_summary(
+    fun.data="mean_sdl",  fun.args = list(mult=1), 
+    geom = "pointrange", color = "#FC4E07", size = 0.4
+    )+
+  stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
+  #geom_sina(aes(color = treatment), show.legend = FALSE)+
+  ylab("Max x") +
+  xlab("Treatment") +
+  coord_cartesian(ylim = c(-27, 55)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140","#000000"))+
+  ggtitle("Wrist Max x")+
+  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  # take out the global comparison, because it's implied that significant
+  # since we are doing post hoc tests
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", label.y=30,
+  #                   method='kruskal.test' ) # actually default is kruskal
+
+#  stat_compare_means(aes(group = treatment), 
+#                     method='kruskal.test' )
+
+ggsave('xbox.pdf',width=2.5,height=3,units='in')
+kruskal.test(x ~ treatment, data = dfxt)
+pairwise.wilcox.test(dfxt$x, dfxt$treatment,
+                 p.adjust.method = "BH")
+```
+
+```{r fourwayy}
+dfy$treatment <- factor(dfy$treatment)
+dfy$treatment <- relevel(dfy$treatment,'excite')
+dfyt <- dfy %>% filter(time==0.4)
+dfyt %>% group_by(treatment) %>%
+  summarise(
+    count = n(),
+    mean = mean(y, na.rm = TRUE),
+    sd = sd(y, na.rm = TRUE),
+    median = median(y, na.rm = TRUE),
+    IQR = IQR(y, na.rm = TRUE)
+  )
+# let's try to add the overbars and stars
+# Statistical test
+stat.test <- dfyt %>%
+  kruskal.test(x=.$y, g=.$treatment) %>%
+  add_significance()
+stat.test
+#stat.test <- tidy(stat.test %>% add_xy_position(x = "treatment"))
+dfyt %>% ggplot(aes(x = treatment, y = y, color=treatment))+ 
+  #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
+  geom_violin(trim = FALSE,show.legend=FALSE) +
+  geom_dotplot(
+    binaxis='y', stackdir='center',
+    color = "black", fill = "#999999",
+    ) +
+  stat_summary(
+    fun.data="mean_sdl",  fun.args = list(mult=1), 
+    geom = "pointrange", color = "#FC4E07", size = 0.4
+    )+
+  stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
+ylab("Max y") +
+  xlab("Treatment") +
+  coord_cartesian(ylim = c(-27, 68)) +
+  scale_color_manual(values = c("#ED2024","#3953A4","#0C8140","#000000"))+
+  ggtitle("Wrist Max y") +
+  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  #stat_compare_means(aes(group = treatment), label =  "p.signif", 
+  #                   method='kruskal.test',  hide.ns = TRUE )
+ggsave('ybox.pdf',width=2.5,height=3,units='in')
+kruskal.test(y ~ treatment, data = dfyt)
+pairwise.wilcox.test(dfyt$y, dfyt$treatment,
+                 p.adjust.method = "BH")
+```
+
+
+Ok this code can be used with dropped norm level.
+TODO: Add that drop...
+
+```{r threewayold}
+# TODO: DROP THE TREATMENT LEVEL NORM AND LET THIS PROCEED...
+# Let's keep this code as is if we want to drop the norm level and proceed...
 my_comps <- list( c("control","inhib"),c("excite","control"),
                   c("excite","inhib") )
 dfxt %>% ggplot(aes(x = treatment, y = x,color = treatment))+ 
@@ -93,7 +184,8 @@ kruskal.test(x ~ treatment, data = dfxt)
 pairwise.wilcox.test(dfxt$x, dfxt$treatment,
                  p.adjust.method = "BH")
 ```
-# y coord box plot
+
+y coord box plot
 
 ```{r prep2}
 dfy$treatment <- factor(dfy$treatment)

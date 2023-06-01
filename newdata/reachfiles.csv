@@ -29,3 +29,11 @@ inhib,no,1086,241,38,5.984251969,0,1000,419,487,200,1,bad,wrist,ihrMS1,/Users/as
 inhib,no,1086,241,38,5.984251969,0,1000,173,238,200,1,bad,wrist,ihrMS1,/Users/aspence/rupertreaching/newinhibrat/week4/cam2/Rupert Inhib MS1 /2022-07-22_12_10_41/CollectedData_gtk.csv
 inhib,no,1580,304,57,8.98,0,1000,426,459,200,0,good,Wrist,DDinhib,dd_inhib_female_2023_05_03_10_23_27DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
 inhib,no,1580,304,57,8.98,0,1000,426,459,200,0,bad,Wrist,DDinhib,DDinhib_05_03_10_31_56DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+inhib,no,1580,304,57,8.98,0,1000,266,286,200,0,good,Wrist,DDinhib,DDinhib_2023_05_03_10_35_16DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+inhib,no,1580,304,57,8.98,0,1000,246,262,200,0,good,Wrist,DDinhib,DDinhib_2023_05_03_10_43_37DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+norm,no,1474,368,59,8.98,0,1000,513,595,200,0,good,Wrist,JRnf1,JR_norm_female_10_48_59DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+norm,no,1474,368,59,8.98,0,1000,606,652,200,0,good,Wrist,JRnf2,JR_norm_female_2_10_55_00DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+norm,no,1474,368,59,8.98,0,1000,619,667,200,0,good,Wrist,JRnf2,JR_norm_female_2_10_56_49DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+norm,no,1474,368,59,8.98,0,1000,592,640,200,0,good,Wrist,JRnf2,JR_norm_female_2_10_58_20DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+excite,no,1474,368,59,8.98,0,1000,280,330,200,0,good,Wrist,VVme,VV_male_excite_11_07_13DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+excite,no,1474,368,59,8.98,0,1000,367,425,200,0,good,Wrist,VVme,VV_male_excite_11_11_01DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
