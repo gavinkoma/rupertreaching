@@ -10,6 +10,9 @@ on spence new M1 mac: launch iterm2-x64! then do conda activate dog
 dog environment has what's needed... and arm64 version conda iffy.
 
 """
+# 2023-06-15 Adding more control rats
+# 
+#
 # 2023-05-31 AJS 
 # finished adding 2 more trials from that rat... good reaches in last vid 43, too bad one at 1 sec goes before vid start! could fix.
 # 2023-05-31 AJS and GK adding one new inhibitory rat from 2023-05-03
@@ -124,6 +127,10 @@ for ind in range(22,len(md)):
 
 # just do new inhib w GK 2023-05-31
 for ind in range(28,len(md)):
+  plotreachkinfile(md.loc[ind,'file'],md.loc[ind,'plexi_x'],md.loc[ind,'plexi_y'])
+
+# just do new controls 15-6-2023
+for ind in range((len(md)-4),len(md)):
   plotreachkinfile(md.loc[ind,'file'],md.loc[ind,'plexi_x'],md.loc[ind,'plexi_y'])
 
 #ok let's also export data needed for velocities analysis:
