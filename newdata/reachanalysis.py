@@ -10,8 +10,11 @@ on spence new M1 mac: launch iterm2-x64! then do conda activate dog
 dog environment has what's needed... and arm64 version conda iffy.
 
 """
+# 2023-06-26 need to fill the data to reduce jumps in control and norm for george grant figure. try this:
+# https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.UnivariateSpline.html
+#
 # 2023-06-15 Adding more control rats
-# 
+# done, w Gavin and Siya, and looks great.
 #
 # 2023-05-31 AJS 
 # finished adding 2 more trials from that rat... good reaches in last vid 43, too bad one at 1 sec goes before vid start! could fix.
