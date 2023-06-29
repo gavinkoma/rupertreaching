@@ -46,6 +46,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 # from scipy.signal import butter,filtfilt
+from scipy.interpolate import UnivariateSpline
 import seaborn as sns
 idx = pd.IndexSlice
 plt.rc('legend',fontsize=8)
@@ -172,7 +173,8 @@ legendlabs = dict(zip(md.loc[:,'type'].unique(),md.loc[:,'type'].unique()))
 for ind in range(len(md)):
   rng=range(round((md.loc[ind,'peakframe']-(md.loc[ind,'aroundpeakframes']/2))), \
       round((md.loc[ind,'peakframe']+(md.loc[ind,'aroundpeakframes']/2))))
-  xco=(dfs[ind].loc[:,idx[:,md.loc[ind,'marker'],'x']] - md.loc[ind,'plexi_x'])/md.loc[ind,'pixpermm']
+  # YIKES should not do this here and below in newdf for export... should be same compute...
+  #xco=(dfs[ind].loc[:,idx[:,md.loc[ind,'marker'],'x']] - md.loc[ind,'plexi_x'])/md.loc[ind,'pixpermm']
   if md.loc[ind,'goodbad']=='good':
     repdf=md.loc[[ind]*len(rng)].reset_index() # repeated meta entries of md
     repdf['frame']=repdf.index
@@ -182,10 +184,16 @@ for ind in range(len(md)):
     outdf=newdf.join(repdf,on='frame',rsuffix='_md').rename({'type':'treatment'},axis='columns')
     #outdf['time']=(outdf['frame']-md.loc[ind,'aroundpeakframes']/2)/fps
     outdf['time']=(outdf['frame'])/fps
+    if any(np.isnan(outdf['x'])):
+      print('Found nans in ',md.loc[0,'file'], ' interpolating...')
+      outdf['x']=outdf['x'].interpolate()
     subs.append(outdf)
     #plt.plot( outdf['time'], outdf['time'], c=cols[md.loc[ind,'type']], label=legendlabs[md.loc[ind,'type']] )
-    plt.plot( outdf['time'], np.array(xco.iloc[rng].droplevel([0,1],axis='columns')), \
+    # should plot outdf here not xco!
+    plt.plot( outdf['time'], outdf['x'], \
       c=cols[md.loc[ind,'type']], label=legendlabs[md.loc[ind,'type']] )
+    #plt.plot( outdf['time'], np.array(xco.iloc[rng].droplevel([0,1],axis='columns')), \
+    #  c=cols[md.loc[ind,'type']], label=legendlabs[md.loc[ind,'type']] )
     legendlabs[md.loc[ind,'type']]='_'+legendlabs[md.loc[ind,'type']]
 #    plt.plot( range(md.loc[ind,'aroundpeakframes']), \
 #      xco.loc[ round((md.loc[ind,'peakframe']-(md.loc[ind,'aroundpeakframes']/2))): \
@@ -204,6 +212,30 @@ plt.annotate('Wall', xy=(0.2, 0),  xycoords='data',
 ad = pd.concat(subs).reset_index()
 ad.to_csv('alldata_x.csv')
 plt.savefig('indivreach_x.pdf')
+
+# Let's try to interpolate the inhib and control.
+# find one with needs:
+# ad[np.isnan(ad.x)]
+# ad[np.isnan(ad.x)].file.unique()
+'''
+array(['/Users/aspence/rupertreaching/newinhibrat/week4/cam2/GS2 Inhib Rupert Reaching/2022-07-22_12_25_49/CollectedData_gtk.csv',
+       '/Users/aspence/rupertreaching/newinhibrat/week4/cam2/GS2 Inhib Rupert Reaching/2022-07-22_12_30_20/CollectedData_gtk.csv',
+       'labelledData20230612toRenameUniquely/mg_control2_08_25_11_48_51/CollectedData_gtk.csv',
+       'labelledData20230612toRenameUniquely/Rupert_week1_cam2_ControlRat1_2021-08-04_12_38_00_fr_wbgam_h264_nearlossless_safe/CollectedData_gtk.csv',
+       'labelledData20230612toRenameUniquely/Rupert_week2_cam2_MG Control 1_2021-08-10_11_08_09_fr_wbgam_h264_nearlossless_safe/CollectedData_gtk.csv',
+       'labelledData20230612toRenameUniquely/Rupert_week2_cam2_MG Control 3_2021-08-10_11_20_51_fr_wbgam_h264_nearlossless_safe/CollectedData_gtk.csv'],
+      dtype=object)
+'''
+# https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.UnivariateSpline.html
+# Get one, fill it, look if good:
+if 0:
+  f1=ad[ad.file=='labelledData20230612toRenameUniquely/mg_control2_08_25_11_48_51/CollectedData_gtk.csv']
+  plt.plot(f1.time, f1.x, 'ro', ms=5)
+  #spl = UnivariateSpline(f1[~np.isnan(f1.x)].time, f1[~np.isnan(f1.x)].x, check_finite=True)
+  f1['xi']=f1.x.interpolate()
+  plt.plot(f1.time, f1.xi, 'g', lw=3)
+  plt.savefig('example_Basic_interpolate.pdf')
+  # This was great, inserted above!
 
 # %% plot with shaded errors
 # Plot the responses for different events and regions
@@ -233,7 +265,7 @@ legendlabs = dict(zip(md.loc[:,'type'].unique(),md.loc[:,'type'].unique()))
 for ind in range(len(md)):
   rng=range(round((md.loc[ind,'peakframe']-(md.loc[ind,'aroundpeakframes']/2))), \
       round((md.loc[ind,'peakframe']+(md.loc[ind,'aroundpeakframes']/2))))
-  yco=((700-dfs[ind].loc[:,idx[:,md.loc[ind,'marker'],'y']]) - md.loc[ind,'plexi_y'])/md.loc[ind,'pixpermm']
+  #yco=((700-dfs[ind].loc[:,idx[:,md.loc[ind,'marker'],'y']]) - md.loc[ind,'plexi_y'])/md.loc[ind,'pixpermm']
   if md.loc[ind,'goodbad']=='good':
     repdf=md.loc[[ind]*len(rng)].reset_index() # repeated meta entries of md
     repdf['frame']=repdf.index
@@ -243,8 +275,14 @@ for ind in range(len(md)):
     outdf=newdf.join(repdf,on='frame',rsuffix='_md').rename({'type':'treatment'},axis='columns')
     #outdf['time']=(outdf['frame']-md.loc[ind,'aroundpeakframes']/2)/fps
     outdf['time']=(outdf['frame'])/fps
+    if any(np.isnan(outdf['y'])):
+      print('Found nans in ',md.loc[ind,'file'], ' interpolating...')
+      if md.loc[ind,'file']=='labelledData20230612toRenameUniquely/Rupert_week2_cam2_MG Control 1_2021-08-10_11_08_09_fr_wbgam_h264_nearlossless_safe/CollectedData_gtk.csv':
+        outdf['y']=outdf['y'].interpolate(method='bfill')
+      else:        
+        outdf['y']=outdf['y'].interpolate()
     subs.append(outdf)
-    plt.plot( outdf['time'], np.array(yco.loc[ rng ]), c=cols[md.loc[ind,'type']], label=legendlabs[md.loc[ind,'type']] )
+    plt.plot( outdf['time'], np.array(outdf['y']), c=cols[md.loc[ind,'type']], label=legendlabs[md.loc[ind,'type']] )
     legendlabs[md.loc[ind,'type']]='_'+legendlabs[md.loc[ind,'type']]
 plt.xlabel('time (s)')
 plt.ylabel('wrist y (mm)')

@@ -39,11 +39,13 @@ theme_set(theme_bw())
 #+
 #    theme(legend.position = "top")
 #  )
+setwd("/Users/aspence/rupertreaching/newdata/")
 dfx <- read.csv("alldata_x.csv")
 dfy <- read.csv("alldata_y.csv")
 ```
 
-# prepare data, aggregate and stats
+Prepare data, aggregate and stats
+
 ```{r prep}
 dfx$treatment <- factor(dfx$treatment)
 dfx$treatment <- relevel(dfx$treatment,'excite')
@@ -59,6 +61,30 @@ dfxt %>% group_by(treatment) %>%
 # Plot it:
 # choose comparisons to plot
 # http://www.sthda.com/english/articles/32-r-graphics-essentials/132-plot-grouped-data-box-plot-bar-plot-and-more/
+```
+
+Let's get some sample sizes for the caption:
+
+```{r samplesize}
+unique(dfxt$rat)
+# num unique rats:
+length(unique(dfxt$rat))
+# num reaches per rat
+xtabs(~rat,data=dfxt)
+# num reaches by treatment type
+xtabs(~treatment,data=dfxt)
+# sample size aggregated per rat vs treatment:
+dfxta <- dfxt %>% group_by(rat) %>%
+  summarise(
+    treatment = first(treatment),
+    count = n(),
+    mean = mean(x, na.rm = TRUE),
+    sd = sd(x, na.rm = TRUE),
+    median = median(x, na.rm = TRUE),
+    IQR = IQR(x, na.rm = TRUE)
+  )
+# sample size after aggregating by rat:
+xtabs(~treatment,dfxta)
 ```
 
 Do the 4 way analysis
@@ -131,7 +157,7 @@ dfyt %>% ggplot(aes(x = treatment, y = y, color=treatment))+
   stat_summary(fun.y= mean, fun.ymin=mean, fun.ymax=mean, geom="crossbar", width=0.1, color = "#FC4E07", )+
 ylab("Max y") +
   xlab("Treatment") +
-  coord_cartesian(ylim = c(-27, 75)) +
+  coord_cartesian(ylim = c(-27, 85)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140","#000000"))+
   ggtitle("Wrist Max y") +
   stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
@@ -152,7 +178,7 @@ TODO: Add that drop...
 # Let's keep this code as is if we want to drop the norm level and proceed...
 my_comps <- list( c("control","inhib"),c("excite","control"),
                   c("excite","inhib") )
-dfxt %>% ggplot(aes(x = treatment, y = x,color = treatment))+ 
+dfxt %>% filter(treatment != "norm") %>% ggplot(aes(x = treatment, y = x,color = treatment))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
   geom_dotplot(
@@ -206,7 +232,7 @@ stat.test <- dfyt %>%
   add_significance()
 stat.test
 #stat.test <- tidy(stat.test %>% add_xy_position(x = "treatment"))
-dfyt %>% ggplot(aes(x = treatment, y = y, color=treatment))+ 
+dfyt %>% filter(treatment != "norm") %>% ggplot(aes(x = treatment, y = y, color=treatment))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
   geom_dotplot(
@@ -238,8 +264,15 @@ Ok let's update with velocities, reach duration, deltaX, deltaY plots. Four way 
 md<-read_csv("reachfiles_generated_wvelocities.csv",col_types = cols(type=col_factor())) %>% filter(goodbad=="good")
 md$type <- relevel(md$type,'control')
 md$type <- relevel(md$type,'excite')
-my_comps <- list( c("control","inhib"),c("excite","control"),
+my_comps4 <- list( c("control","inhib"),c("excite","control"),
                   c("excite","inhib"), c("control","norm"), c("excite","norm"), c("norm","inhib") )
+
+md3<-read_csv("reachfiles_generated_wvelocities.csv",col_types = cols(type=col_factor())) %>% filter(goodbad=="good") %>% filter(type != 'norm')
+md3$type <- relevel(md3$type,'control')
+md3$type <- relevel(md3$type,'excite')
+my_comps3 <- list( c("control","inhib"),c("excite","control"),
+                  c("excite","inhib") )
+
 md %>% ggplot(aes(x = type, y = velx, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
@@ -267,12 +300,7 @@ ggsave('xvel.pdf',width=2.5,height=3,units='in')
 3 way Ok let's update with velocities, reach duration, deltaX, deltaY plots.
 
 ```{r velo}
-md<-read_csv("reachfiles_generated_wvelocities.csv",col_types = cols(type=col_factor())) %>% filter(goodbad=="good")
-md$type <- relevel(md$type,'control')
-md$type <- relevel(md$type,'excite')
-my_comps <- list( c("control","inhib"),c("excite","control"),
-                  c("excite","inhib") )
-md %>% ggplot(aes(x = type, y = velx, color=type))+ 
+md3 %>% ggplot(aes(x = type, y = velx, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
   geom_dotplot(
@@ -289,7 +317,7 @@ ylab("X Velocity") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
   ggtitle("X Velocity vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps3, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('xvel3.pdf',width=2.5,height=3,units='in')
@@ -315,7 +343,7 @@ ylab("Y Velocity") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140","#000000"))+
   ggtitle("Y Velocity vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps4, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('yvel.pdf',width=2.5,height=3,units='in')
@@ -324,8 +352,8 @@ ggsave('yvel.pdf',width=2.5,height=3,units='in')
 
 and now y
 
-```{r veloy}
-md %>% ggplot(aes(x = type, y = -vely, color=type))+ 
+```{r veloy2}
+md3 %>% ggplot(aes(x = type, y = -vely, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
   geom_dotplot(
@@ -342,7 +370,7 @@ ylab("Y Velocity") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
   ggtitle("Y Velocity vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps3, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('yvel3.pdf',width=2.5,height=3,units='in')
@@ -350,7 +378,7 @@ ggsave('yvel3.pdf',width=2.5,height=3,units='in')
 
 and now dur 4 way
 
-```{r velox}
+```{r velox4}
 md %>% ggplot(aes(x = type, y = rchdur, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
@@ -368,7 +396,7 @@ ylab("Reach Duration (s)") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140","#000000"))+
   ggtitle("Reach Duration vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps4, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('reachdur.pdf',width=2.5,height=3,units='in')
@@ -377,7 +405,7 @@ ggsave('reachdur.pdf',width=2.5,height=3,units='in')
 and now dur
 
 ```{r velox}
-md %>% ggplot(aes(x = type, y = rchdur, color=type))+ 
+md3 %>% ggplot(aes(x = type, y = rchdur, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
   geom_dotplot(
@@ -394,7 +422,7 @@ ylab("Reach Duration (s)") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
   ggtitle("Reach Duration vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps3, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('reachdur3.pdf',width=2.5,height=3,units='in')
@@ -403,7 +431,7 @@ ggsave('reachdur3.pdf',width=2.5,height=3,units='in')
 
 and now deltax
 
-```{r veloy2}
+```{r deltax1}
 md %>% ggplot(aes(x = type, y = dx, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
@@ -421,7 +449,7 @@ ylab("Reach Distance (x)") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140","#000000"))+
   ggtitle("Reach X Distance vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps4, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('xdistance.pdf',width=2.5,height=3,units='in')
@@ -429,8 +457,8 @@ ggsave('xdistance.pdf',width=2.5,height=3,units='in')
 
 and now deltax3way
 
-```{r veloy2}
-md %>% ggplot(aes(x = type, y = dx, color=type))+ 
+```{r veloy8}
+md3 %>% ggplot(aes(x = type, y = dx, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
   geom_dotplot(
@@ -447,7 +475,7 @@ ylab("Reach Distance (x)") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
   ggtitle("Reach X Distance vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps3, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('xdistance3.pdf',width=2.5,height=3,units='in')
@@ -455,7 +483,7 @@ ggsave('xdistance3.pdf',width=2.5,height=3,units='in')
 
 and now deltay
 
-```{r veloy3}
+```{r deltay1}
 md %>% ggplot(aes(x = type, y = dy, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
@@ -473,7 +501,7 @@ ylab("Reach Distance (y)") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140","#000000"))+
   ggtitle("Reach Y Distance vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps4, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('ydistance.pdf',width=2.5,height=3,units='in')
@@ -482,8 +510,8 @@ ggsave('ydistance.pdf',width=2.5,height=3,units='in')
 
 and now deltay3way
 
-```{r veloy3}
-md %>% ggplot(aes(x = type, y = dy, color=type))+ 
+```{r deltay3way}
+md3 %>% ggplot(aes(x = type, y = dy, color=type))+ 
   #geom_boxplot(aes(color = treatment), show.legend = FALSE)+
   geom_violin(trim = FALSE,show.legend=FALSE) +
   geom_dotplot(
@@ -500,7 +528,7 @@ ylab("Reach Distance (y)") +
   #coord_cartesian(ylim = c(-27, 60)) +
   scale_color_manual(values = c("#ED2024","#3953A4","#0C8140"))+
   ggtitle("Reach Y Distance vs Treatment") +
-  stat_compare_means(comparisons=my_comps, label="p.signif") # + # default is Wilcox
+  stat_compare_means(comparisons=my_comps3, label="p.signif") # + # default is Wilcox
   #stat_compare_means(aes(group = treatment), label =  "p.signif", 
   #                   method='kruskal.test',  hide.ns = TRUE )
 ggsave('ydistance3.pdf',width=2.5,height=3,units='in')
