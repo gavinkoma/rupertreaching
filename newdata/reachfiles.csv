@@ -37,3 +37,7 @@ norm,no,1474,368,59,8.98,0,1000,619,667,200,0,good,Wrist,JRnf2,JR_norm_female_2_
 norm,no,1474,368,59,8.98,0,1000,592,640,200,0,good,Wrist,JRnf2,JR_norm_female_2_10_58_20DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
 excite,no,1474,368,59,8.98,0,1000,280,330,200,0,good,Wrist,VVme,VV_male_excite_11_07_13DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
 excite,no,1474,368,59,8.98,0,1000,367,425,200,0,good,Wrist,VVme,VV_male_excite_11_11_01DLC_resnet50_Please_use_this_oneMay20shuffle1_200000.csv
+control,no,1621,457,44,6.92,0,1000,344,379,200,0,good,Wrist,MGc2,labelledData20230612toRenameUniquely/mg_control2_08_25_11_48_51/CollectedData_gtk.csv
+control,no,890,529,64,10.2,0,1000,527,560,200,0,good,Wrist,MGc1,labelledData20230612toRenameUniquely/Rupert_week1_cam2_ControlRat1_2021-08-04_12_38_00_fr_wbgam_h264_nearlossless_safe/CollectedData_gtk.csv
+control,no,1726,400,74,11.7,0,1000,208,224,200,0,good,Wrist,MGc1,labelledData20230612toRenameUniquely/Rupert_week2_cam2_MG Control 1_2021-08-10_11_08_09_fr_wbgam_h264_nearlossless_safe/CollectedData_gtk.csv
+control,no,1633,420,68,10.7,0,1000,550,590,200,0,good,Wrist,MGc3,labelledData20230612toRenameUniquely/Rupert_week2_cam2_MG Control 3_2021-08-10_11_20_51_fr_wbgam_h264_nearlossless_safe/CollectedData_gtk.csv
